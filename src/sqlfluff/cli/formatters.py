@@ -216,6 +216,7 @@ class OutputStreamFormatter:
         self, fname: str, violations: List[SQLBaseError]
     ) -> str:
         """Format a set of violations in a `LintingResult`."""
+        fname = fname[fname.find('sql_files/'):]
         text_buffer = StringIO()
         # Success is based on there being no fails, but we still
         # want to show the results if there are warnings (even
@@ -238,6 +239,7 @@ class OutputStreamFormatter:
             s = sorted(violations, key=lambda v: (v.line_no, v.line_pos))
             for violation in s:
                 text_buffer.write(
+                    f'{fname}:{violation.line_no:<6}' +
                     self.format_violation(
                         violation, max_line_length=self.output_line_length
                     )
@@ -665,4 +667,4 @@ class OutputStreamFormatter:
 
     def completion_message(self) -> None:
         """Prints message when SQLFluff is finished."""
-        click.echo("All Finished" f"{'' if self.plain_output else ' 📜 🎉'}!")
+        click.echo("\n✅All Finished" f"{'' if self.plain_output else ' 📜 🎉'}!")
