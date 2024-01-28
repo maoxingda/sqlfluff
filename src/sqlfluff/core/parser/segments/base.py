@@ -268,6 +268,8 @@ class BaseSegment(metaclass=SegmentMetaclass):
         return self._hash
 
     def __repr__(self) -> str:
+        import re
+        return re.sub(r"\s+", " ", self.raw)
         return f"<{self.__class__.__name__}: ({self.pos_marker})>"
 
     def __getstate__(self) -> Dict[str, Any]:
